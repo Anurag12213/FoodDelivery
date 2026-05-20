@@ -33,9 +33,14 @@ public class AuthController {
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+
+    //Login using authDto reponse
         @PostMapping("/login")
-        public String login(@RequestBody LoginRequest request){
-        return service.login(request);
+        public ResponseEntity<?> login(@RequestBody LoginRequest request){
+            Object response=service.login(request);
+            if(response instanceof String) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+            return ResponseEntity.ok(response);
     }
 
 }
