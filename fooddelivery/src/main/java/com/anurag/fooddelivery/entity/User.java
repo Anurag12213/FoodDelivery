@@ -3,6 +3,8 @@ package com.anurag.fooddelivery.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 @Entity
 public class User {
     @Id
@@ -17,7 +19,8 @@ public class User {
     private String password;
 
     private String role;
-
+    @OneToMany(mappedBy = "owner")
+    private List<Restaurant> restaurants;
     public String getEmail() {
         return email;
     }

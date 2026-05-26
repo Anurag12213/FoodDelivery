@@ -19,24 +19,23 @@ public class FoodItemController {
     public FoodItem createFoodForRestaurant(@RequestBody FoodItem food,@PathVariable int restaurantId){
         return service.createFoodForRestaurant(food,restaurantId);
     }
-    //createFood
-    @PostMapping
-    public FoodItem createFood(@Valid  @RequestBody FoodItem food){
-        return service.createFood(food);
-    }
+
     //getFoods
     @GetMapping
     public List<FoodItem> getAllFoods(){
         return service.getAllFood();
     }
+    //getFoodBtId
     @GetMapping("/{id}")
     public FoodItem getFood(@PathVariable int id){
         return service.getById(id);
     }
     @PutMapping("/{id}")
+    //updateFood
     public FoodItem update(@PathVariable int id,@RequestBody FoodItem newFood){
         return service.update(id,newFood);
     }
+    //deleteFood
     @DeleteMapping("/{id}")
     public String delete(@PathVariable int id){
         return service.delete(id);

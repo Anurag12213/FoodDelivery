@@ -1,11 +1,13 @@
 package com.anurag.fooddelivery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Entity
 public class Restaurant {
     @Id
@@ -19,9 +21,14 @@ public class Restaurant {
 
     @NotBlank(message = "Description cannot be empty")
     private String description;
+    private boolean isActive = true;
     @OneToMany(mappedBy = "restaurant")
     @JsonManagedReference
     private List<FoodItem>  foods;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="owner_id")
+    private User owner;
     public Restaurant(){}
 
     public List<FoodItem> getFoods() {
@@ -62,5 +69,19 @@ public class Restaurant {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
