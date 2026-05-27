@@ -16,7 +16,7 @@ public class FoodItem {
     private double price;
     @NotBlank(message = "Cateogry cannot be empty")
     private String category;
-
+    private boolean isActive = true;
     @ManyToOne
     @JoinColumn(name = "restaurent_id")
     @JsonBackReference
@@ -62,5 +62,13 @@ public class FoodItem {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

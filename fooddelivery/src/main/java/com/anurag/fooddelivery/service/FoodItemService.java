@@ -44,21 +44,91 @@ public class FoodItemService {
     }
     //getAll
     public List<FoodItem> getAllFood(){
-        return repo.findAll();
+        return repo.findByIsActiveTrue();
     }
     //getById
     public FoodItem getById(int id){
-        return repo.findById(id).orElse(null);
+
+        FoodItem food =
+                repo.findByIdAndIsActiveTrue(id);
+
+        if(food == null){
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Food Not Found"
+            );
+        }
+
+        return food;
     }
     //update
-    public FoodItem update(int id,FoodItem food){
-        food.setId(id);
-        return repo.save(food);
+    public FoodItem update(int id, FoodItem newFood){
+
+        FoodItem existingFood =
+                repo.findByIdAndIsActiveTrue(id);
+
+        if(existingFood == null){
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Food Not Found"
+            );
+        }
+
+        String email =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName();
+
+        User loggedInUser =
+                userRepo.findByEmail(email);
+
+        if(existingFood.getRestaurant()
+                .getOwner()
+                .getId()
+                != loggedInUser.getId()){
+
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Access Denied"
+            );
+        }
+
+        existingFood.setName(
+                newFood.getName()
+        );
+
+        existingFood.setPrice(
+                newFood.getPrice()
+        );
+
+        existingFood.setCategory(
+                newFood.getCategory()
+        );
+
+        return repo.save(existingFood);
     }
     //delete
     public String delete(int id){
-        repo.deleteById(id);
-        return "Food Deleted";
+        FoodItem food =
+                repo.findByIdAndIsActiveTrue(id);
+        if(food == null){
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Food Not Found"
+            );
+        }
+        String email=SecurityContextHolder.getContext().getAuthentication().getName();
+        User loggedInUser=userRepo.findByEmail(email);
+        if(food.getRestaurant().getOwner().getId() != loggedInUser.getId()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Denied");
+        }
+        food.setActive(false);
+        repo.save(food);
+        return "Food Deactivated";
     }
 
 
