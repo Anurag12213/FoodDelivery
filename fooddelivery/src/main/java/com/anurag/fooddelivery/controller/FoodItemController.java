@@ -16,7 +16,7 @@ public class FoodItemController {
 
     //createFoodForRestaurant
     @PostMapping("/restaurant/{restaurantId}")
-    public FoodItem createFoodForRestaurant(@RequestBody FoodItem food,@PathVariable int restaurantId){
+    public FoodItem createFoodForRestaurant(@Valid @RequestBody FoodItem food,@PathVariable int restaurantId){
         return service.createFoodForRestaurant(food,restaurantId);
     }
 

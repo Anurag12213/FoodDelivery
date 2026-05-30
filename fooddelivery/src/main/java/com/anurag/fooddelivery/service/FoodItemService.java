@@ -32,6 +32,7 @@ public class FoodItemService {
                     HttpStatus.NOT_FOUND,"Restaurant Not Found"
             );
         }
+
         String email= SecurityContextHolder.getContext().getAuthentication().getName();
         User loggedInUser=userRepo.findByEmail(email);
         if(restaurant.getOwner().getId() != loggedInUser.getId()){
